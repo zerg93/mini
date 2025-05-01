@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: mini
+
+server:
+  port: 9071
+
+camel:
+  rest:
+    component: jetty
+    binding-mode: json
+    port: 9081
+  springboot:
+    routes-include-pattern:
