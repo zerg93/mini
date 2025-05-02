@@ -7,8 +7,8 @@ server:
 
 camel:
   rest:
+    port: 9081
     component: jetty
     binding-mode: json
-    port: 9081
   springboot:
-    routes-include-pattern:
+    routes-include-pattern: file:yaml/mini/**/*.yaml
