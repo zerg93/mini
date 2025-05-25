@@ -1,0 +1,6 @@
+- templated-route:
+    route-id: service-route
+    route-template-ref: service-template
+    parameters:
+      - name: RestPath
+        value: /{inst}/{service}/{api}

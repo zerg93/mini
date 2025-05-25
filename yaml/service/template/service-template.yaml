@@ -1,0 +1,11 @@
+- route-template:
+    id: service-template
+    parameters:
+      - name: RestPath
+    from:
+      uri: rest:post:{{RestPath}}
+      steps:
+        - log: "path: {{RestPath}}"
+        - log: ${headers}
+        - process:
+            ref: validProcessor
