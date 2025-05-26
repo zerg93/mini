@@ -38,6 +38,7 @@ dependencies {
     implementation 'org.apache.camel:camel-jetty'
     implementation 'org.apache.camel:camel-jackson'
     implementation 'org.apache.camel:camel-yaml-dsl'
+    implementation 'org.apache.camel:camel-kafka'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

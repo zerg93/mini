@@ -1,0 +1,8 @@
+### S00001
+POST http://localhost:10081/api/I0000004/getTrain/getTrainInfo
+Accept: application/json
+Content-Type: application/json
+
+{
+  "trainId": "S00001"
+}

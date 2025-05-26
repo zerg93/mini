@@ -1,0 +1,13 @@
+- route-template:
+    id: proxy-template
+    parameters:
+      - name: RequestTopic
+      - name: ResponseTopic
+    from:
+      uri: kafka:{{RequestTopic}}
+      steps:
+        - log: ${headers}
+        - load-balance:
+            strategy: failover
+            steps:
+              - toD: 

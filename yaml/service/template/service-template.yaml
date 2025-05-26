@@ -5,7 +5,7 @@
     from:
       uri: rest:post:{{RestPath}}
       steps:
-        - log: "path: {{RestPath}}"
         - log: ${headers}
-        - process:
-            ref: validProcessor
+        - convertBodyTo:
+            type: String
+        - log: ${body}

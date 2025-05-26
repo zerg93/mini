@@ -13,27 +13,91 @@ spring:
       hibernate:
         default_schema: mini
         format_sql: true
+  kafka:
+    bootstrap-servers: localhost:29092,localhost:39092,localhost:49092
+    consumer:
+      group-id: request-reply
+      auto-offset-reset: latest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+camel:
+  component:
+    kafka:
+      brokers: ${spring.kafka.bootstrap-servers}
+      group-id: kafka-proxy
+      auto-offset-reset: latest
+      additional-properties:
+        key.serializer: org.apache.kafka.common.serialization.StringSerializer
+        value.serializer: org.apache.kafka.common.serialization.StringSerializer
+        key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 logging:
   level:
     root: INFO
     org.apache.camel: INFO
     org.hibernate.SQL: DEBUG
-#    org.hibernate.type.descriptor.sql: TRACE
+    org.apache.camel.component.kafka: INFO
 ---
 spring:
   config:
     activate:
       on-profile: was
 server:
-  port: 9071
+  port: 10071
 
 camel:
   rest:
-    port: 9081
+    context-path: /api
+    port: 10081
     component: jetty
     binding-mode: json
   springboot:
     routes-include-pattern: file:yaml/service/**/*.yaml
-#    main-run-controller: true
 ---
+spring:
+  config:
+    activate:
+      on-profile: proxy
+server:
+  port: 9072
+
+camel:
+  rest:
+    port: 9082
+    component: jetty
+    binding-mode: json
+  springboot:
+    routes-include-pattern: file:yaml/proxy/**/*.yaml
+---
+spring:
+  config:
+    activate:
+      on-profile: prov
+server:
+  port: 9073
+
+camel:
+  rest:
+    port: 9083
+    component: jetty
+    binding-mode: json
+  springboot:
+    routes-include-pattern: file:yaml/prov/**/*.yaml
+---
+spring:
+  config:
+    activate:
+      on-profile: log
+server:
+  port: 9074
+
+camel:
+  rest:
+    port: 9084
+    component: jetty
+    binding-mode: json
+  springboot:
+    routes-include-pattern: file:yaml/log/**/*.yaml
