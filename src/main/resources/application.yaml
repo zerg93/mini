@@ -24,6 +24,16 @@ spring:
 
 camel:
   component:
+    vertx-kafka:
+      bootstrap-servers: ${spring.kafka.bootstrap-servers}
+      group-id: kafka-proxy
+      auto-offset-reset: latest
+      additional-properties:
+        key.serializer: org.apache.kafka.common.serialization.StringSerializer
+        value.serializer: org.apache.kafka.common.serialization.StringSerializer
+        key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
     kafka:
       brokers: ${spring.kafka.bootstrap-servers}
       group-id: kafka-proxy
@@ -84,6 +94,7 @@ camel:
     port: 9083
     component: jetty
     binding-mode: json
+    context-path: /prov
   springboot:
     routes-include-pattern: file:yaml/prov/**/*.yaml
 ---

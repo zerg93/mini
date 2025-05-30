@@ -4,10 +4,43 @@
       - name: RequestTopic
       - name: ResponseTopic
     from:
-      uri: kafka:{{RequestTopic}}
+      uri: vertx-kafka:{{RequestTopic}}
       steps:
-        - log: ${headers}
-        - load-balance:
-            strategy: failover
+        - onCompletion:
             steps:
-              - toD: 
+              - setHeader:
+                  name: kafka_correlationId
+                  simple: ${exchangeProperty.kafka_correlationId}
+              - log: "응답 헤더: ${headers}"
+              - to: vertx-kafka:{{ResponseTopic}}
+        - onException:
+            exception: java.lang.Exception
+            handled:
+              constant: true
+            steps:
+              - log: "🔥 예외 발생: ${exception.message}"
+              - stop: {}
+
+        - threads:
+            poolSize: 10
+            maxPoolSize: 50
+            maxQueueSize: 1000
+        - setProperty:
+            name: kafka_correlationId
+            simple: ${header.kafka_correlationId}
+        - setProperty:
+            name: kafka.PARTITION
+            simple: ${header.kafka.PARTITION}
+        - log: "수신 헤더: ${headers}"
+        - removeHeaders:
+            pattern: CamelHttp*
+
+        - load-balance:
+            round-robin: {}
+            steps:
+              - to: "http://localhost:9083/prov/I0000004/getTrain/getTrainInfo?bridgeEndpoint=true"
+
+        - log: "응답 바디: ${body}"
+
+        - removeHeaders:    # ✅ 중복 헤더 방지
+            pattern: "*"

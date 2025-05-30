@@ -1,5 +1,5 @@
 - route-template:
-    id: service-template
+    id: prov-template
     parameters:
       - name: RestPath
     from:
@@ -12,9 +12,10 @@
             steps:
               - log: "🔥 예외 발생! 헤더: ${headers}, 바디: ${body}, 예외: ${exception.message}"
               - stop: { }
-        - log: ${headers}
         - convertBodyTo:
             type: String
+        - removeHeaders:
+            pattern: CamelHttp*
+        - to: "http://localhost:9999/test/api/I0000040/ServiceA/forward"
+        - log: ${headers}
         - log: ${body}
-        - process:
-            ref: requestReplyProcessor

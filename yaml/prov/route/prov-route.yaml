@@ -1,0 +1,6 @@
+- templated-route:
+    route-id: prov-route
+    route-template-ref: prov-template
+    parameters:
+      - name: RestPath
+        value: /{inst}/{service}/{api}

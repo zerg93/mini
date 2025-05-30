@@ -6,3 +6,5 @@
         value: request.T00001
       - name: ResponseTopic
         value: response.T00001
+      - name: RestPath
+        value: /{inst}/{service}/{api}

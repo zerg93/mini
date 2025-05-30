@@ -41,7 +41,7 @@ CREATE TABLE mini.api (
     service_code VARCHAR(10) NOT NULL,
     api_eng_name VARCHAR(50) NOT NULL,
     api_kor_name VARCHAR(50) NOT NULL,
-    request_url VARCHAR(200) NOT NULL,
+    request_url VARCHAR(200) NOT NULL UNIQUE ,
     response_url VARCHAR(200),
     reverse_yn CHAR(1) NOT NULL CHECK (reverse_yn IN ('Y', 'N')),
     use_yn CHAR(1) NOT NULL DEFAULT 'Y' CHECK (use_yn IN ('Y', 'N')),
